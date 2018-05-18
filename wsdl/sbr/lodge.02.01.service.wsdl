@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:core="http://sbr.gov.au/comn/core.02.data" xmlns:tns="http://sbr.gov.au/comn/lodge.02.service" name="LodgeService" targetNamespace="http://sbr.gov.au/comn/lodge.02.service">
+	<wsdl:types>
+		<xs:schema version="02.01" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sbdm="http://sbr.gov.au/comn/sbdm.02.data" elementFormDefault="qualified" targetNamespace="http://sbr.gov.au/comn/lodge.02.service">
+			<xs:import namespace="http://sbr.gov.au/comn/core.02.data" schemaLocation="core.02.01.data.xsd"/>
+			<xs:import namespace="http://sbr.gov.au/comn/sbdm.02.data" schemaLocation="sbdm.02.01.data.xsd"/>
+			<xs:element name="RequestLodgeReport">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="sbdm:StandardBusinessDocumentMessage"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ResponseLodgeReport">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="sbdm:StandardBusinessDocumentMessage"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="RequestLodgeReportMessage">
+		<wsdl:part name="request" element="tns:RequestLodgeReport"/>
+	</wsdl:message>
+	<wsdl:message name="ResponseLodgeReportMessage">
+		<wsdl:part name="response" element="tns:ResponseLodgeReport"/>
+		<wsdl:part name="nonRepudiation" element="core:NonRepudiation"/>
+	</wsdl:message>
+	<wsdl:portType name="ILodge02">
+		<wsdl:operation name="LodgeReport">
+			<wsdl:input name="RequestLodgeReport" message="tns:RequestLodgeReportMessage"/>
+			<wsdl:output name="ResponseLodgeReport" message="tns:ResponseLodgeReportMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="Lodge.02.SoapBinding" type="tns:ILodge02">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<!-- <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" URI="#sbr.mtom.policy"/> -->
+		<wsdl:operation name="LodgeReport">
+			<soap:operation soapAction="http://sbr.gov.au/services/lodge.02.service/LodgeReport" soapActionRequired="true"/>
+			<wsdl:input name="RequestLodgeReport">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="ResponseLodgeReport">
+				<soap:body parts="response" use="literal"/>
+				<soap:header message="tns:ResponseLodgeReportMessage" part="nonRepudiation" use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="Lodge.02.Service">
+		<wsdl:port name="Lodge.02.Port" binding="tns:Lodge.02.SoapBinding">
+			<soap:address location="https://sbr.gov.au/services/lodge.02.service"/>
+		</wsdl:port>
+	</wsdl:service>
+	<!-- <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" wsu:Id="sbr.mtom.policy" >
+		<wsoma:OptimizedMimeSerialization/>
+	</wsp:Policy> -->
+</wsdl:definitions>

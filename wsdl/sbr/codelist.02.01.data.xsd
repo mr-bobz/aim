@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Simple structure to allow collation of agency code lists -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sbdm="http://sbr.gov.au/comn/sbdm.02.data" xmlns:tns="http://sbr.gov.au/comn/codelist.02.data" targetNamespace="http://sbr.gov.au/comn/codelist.02.data" elementFormDefault="qualified" version="02.01">
+	<xs:import namespace="http://sbr.gov.au/comn/sbdm.02.data" schemaLocation="sbdm.02.01.data.xsd"/>
+	<xs:complexType name="AgencyCodeListType">
+		<xs:sequence>
+			<xs:element ref="sbdm:MessageEventItems"/>
+		</xs:sequence>
+		<xs:attribute name="agency" type="sbdm:IdentificationDetails.IdentifierDesignation.TextType" use="required"/>
+		<xs:attribute name="version" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:element name="AgencyCodeList" type="tns:AgencyCodeListType"/>
+	<xs:complexType name="AgencyCodeListsType">
+		<xs:sequence>
+			<xs:element ref="tns:AgencyCodeList" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="AgencyCodeLists" type="tns:AgencyCodeListsType"/>
+</xs:schema>

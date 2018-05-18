@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The source of truth of simple elements in this schema is the Taxonomy Reference Model (TREF). Changes should be made in the TREF first, then replicated in this file -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:tns="http://sbr.gov.au/comn/sbdm.02.data" targetNamespace="http://sbr.gov.au/comn/sbdm.02.data" elementFormDefault="qualified" version="02.01">
+	<!-- <xs:import namespace="http://www.w3.org/2005/05/xmlmime" schemaLocation="http://www.w3.org/2005/05/xmlmime"/> -->
+	<!-- <xs:import namespace="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" schemaLocation="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"/> -->
+	<xs:import namespace="http://www.w3.org/2005/05/xmlmime" schemaLocation="xmlmime.xsd"/>
+	<xs:import namespace="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" schemaLocation="oasis-200401-wss-wssecurity-utility-1.0.xsd"/>
+	<!-- Standard Business Document Message -->
+	<xs:element name="StandardBusinessDocumentMessage" type="tns:StandardBusinessDocumentMessageType"/>
+	<xs:complexType name="StandardBusinessDocumentMessageType">
+		<xs:sequence>
+			<xs:element name="StandardBusinessDocumentHeader" type="tns:StandardBusinessDocumentHeaderType"/>
+			<xs:element name="StandardBusinessDocumentBody" type="tns:StandardBusinessDocumentBodyType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute ref="wsu:Id"/>
+	</xs:complexType>
+	<!-- Standard Business Document Header -->
+	<xs:complexType name="StandardBusinessDocumentHeaderType">
+		<xs:sequence>
+			<xs:element name="Message.Type.Text" type="tns:Message.Type.TextType"/>
+			<xs:element name="MessageTimestamps" type="tns:MessageTimestampsType"/>
+			<xs:element name="Sender" type="tns:PartyType" minOccurs="0"/>
+			<xs:element name="Receiver" type="tns:PartyType" minOccurs="0"/>
+			<xs:element name="LodgementReceipt" type="tns:LodgementReceiptType" minOccurs="0"/>
+			<xs:element name="SoftwareInformation" type="tns:SoftwareInformationType" minOccurs="0"/>
+			<xs:element name="BusinessDocuments" type="tns:BusinessDocumentsType" minOccurs="0"/>
+			<xs:element name="MessageEvent" type="tns:MessageEventType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Message.Type.TextType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="80"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="LodgementReceiptType">
+		<xs:sequence>
+			<xs:element name="Lodgement.Receipt.Identifier" type="tns:Lodgement.Receipt.IdentifierType" minOccurs="0"/>
+			<xs:element name="Lodgement.Receipt.Datetime" type="tns:Lodgement.Receipt.DatetimeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Lodgement.Receipt.IdentifierType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="80"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Lodgement.Receipt.DatetimeType">
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<!-- Standard Business Document Body -->
+	<xs:complexType name="StandardBusinessDocumentBodyType">
+		<xs:sequence>
+			<xs:element name="BusinessDocumentInstances" type="tns:BusinessDocumentInstancesType"/>
+			<xs:element name="AttachmentInstances" type="tns:AttachmentInstancesType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute ref="wsu:Id"/>
+	</xs:complexType>
+	<!-- Message Timestamp -->
+	<xs:complexType name="MessageTimestampsType">
+		<xs:sequence>
+			<xs:element name="MessageTimestamp" type="tns:MessageTimestampType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MessageTimestampType">
+		<xs:sequence>
+			<xs:element name="Message.Timestamp.Generation.Datetime" type="tns:Message.Timestamp.Generation.DatetimeType"/>
+			<xs:element name="Message.Timestamp.GenerationSource.Code" type="tns:Message.Timestamp.GenerationSource.CodeType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Message.Timestamp.Generation.DatetimeType">
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="Message.Timestamp.GenerationSource.CodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="BusinessEntity"/>
+			<xs:enumeration value="SBRCore"/>
+			<xs:enumeration value="GovernmentAgency"/>
+			<xs:enumeration value="VANguard"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- Business Document -->
+	<xs:complexType name="BusinessDocumentsType">
+		<xs:sequence>
+			<xs:element name="BusinessDocument" type="tns:BusinessDocumentType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BusinessDocumentType">
+		<xs:sequence>
+			<xs:element name="BusinessDocument.Sequence.Number" type="tns:BusinessDocument.Sequence.NumberType"/>
+			<xs:element name="BusinessDocument.Creation.Datetime" type="tns:BusinessDocument.Creation.DatetimeType"/>
+			<xs:element name="BusinessDocument.ValidationUniformResourceIdentifier.Text" type="tns:BusinessDocument.ValidationUniformResourceIdentifier.TextType"/>
+			<xs:element name="BusinessDocument.BusinessGeneratedIdentifier.Text" type="tns:BusinessDocument.BusinessGeneratedIdentifier.TextType" minOccurs="0"/>
+			<xs:element name="BusinessDocument.GovernmentGeneratedIdentifier.Text" type="tns:BusinessDocument.GovernmentGeneratedIdentifier.TextType" minOccurs="0"/>
+			<xs:element name="Attachments" type="tns:AttachmentsType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="BusinessDocument.Sequence.NumberType">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BusinessDocument.Creation.DatetimeType">
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:simpleType name="BusinessDocument.ValidationUniformResourceIdentifier.TextType">
+		<xs:restriction base="xs:anyURI">
+			<xs:maxLength value="1024"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BusinessDocument.BusinessGeneratedIdentifier.TextType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="80"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BusinessDocument.GovernmentGeneratedIdentifier.TextType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="80"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- Business Document Instance -->
+	<xs:complexType name="BusinessDocumentInstancesType">
+		<xs:sequence>
+			<xs:element name="BusinessDocumentInstance" type="tns:BusinessDocumentInstanceType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BusinessDocumentInstanceType">
+		<xs:sequence>
+			<xs:element name="BusinessDocument.Sequence.Number" type="tns:BusinessDocument.Sequence.NumberType"/>
+			<xs:element name="BusinessDocument.Instance.Text" type="tns:BusinessDocument.Instance.TextType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BusinessDocument.Instance.TextType">
+		<xs:sequence>
+			<xs:any processContents="skip"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- Attachment -->
+	<xs:complexType name="AttachmentsType">
+		<xs:sequence>
+			<xs:element name="Attachment" type="tns:AttachmentType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AttachmentType">
+		<xs:sequence>
+			<xs:element name="Message.Attachment.Sequence.Number" type="tns:Message.Attachment.Sequence.NumberType"/>
+			<xs:element name="Message.Attachment.FileName.Text" type="tns:Message.Attachment.FileName.TextType" minOccurs="0"/>
+			<xs:element name="Message.Attachment.Description.Text" type="tns:Message.Attachment.Description.TextType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Message.Attachment.Sequence.NumberType">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Message.Attachment.FileName.TextType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="80"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Message.Attachment.Description.TextType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1024"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- Attachment Instance -->
+	<xs:complexType name="AttachmentInstancesType">
+		<xs:sequence>
+			<xs:element name="AttachmentInstance" type="tns:AttachmentInstanceType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AttachmentInstanceType">
+		<xs:sequence>
+			<xs:element name="Message.Attachment.Sequence.Number" type="tns:Message.Attachment.Sequence.NumberType"/>
+			<xs:element name="Message.Attachment.Instance.BinaryObject" type="tns:Message.Attachment.Instance.BinaryObjectType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Message.Attachment.Instance.BinaryObjectType">
+		<xs:simpleContent>
+			<xs:restriction base="xmime:base64Binary">
+				<xs:attribute ref="xmime:contentType" use="required"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<!-- Message Event -->
+	<xs:complexType name="MessageEventType">
+		<xs:sequence>
+			<xs:element name="Message.Event.MaximumSeverity.Code" type="tns:Message.Event.Item.Severity.CodeType"/>
+			<xs:element name="MessageEventItems" type="tns:MessageEventItemsType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- Message Event Item -->
+	<xs:complexType name="MessageEventItemsType">
+		<xs:sequence>
+			<xs:element name="MessageEventItem" type="tns:MessageEventItemType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="MessageEventItems" type="tns:MessageEventItemsType"/>
+	<xs:complexType name="MessageEventItemType">
+		<xs:sequence>
+			<xs:element name="Message.Event.Item.Error.Code" type="tns:Message.Event.Item.Error.CodeType"/>
+			<xs:element name="Message.Event.Item.Severity.Code" type="tns:Message.Event.Item.Severity.CodeType"/>
+			<xs:element name="Message.Event.Item.Short.Description" type="tns:Message.Event.Item.Short.DescriptionType" minOccurs="0"/>
+			<xs:element name="Message.Event.Item.Detailed.Description" type="tns:Message.Event.Item.Detailed.DescriptionType" minOccurs="0"/>
+			<xs:element name="Parameters" type="tns:MessageEventItemParametersType" minOccurs="0"/>
+			<xs:element name="Locations" type="tns:MessageEventItemLocationsType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Message.Event.Item.Error.CodeType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="80"/>
+			<xs:pattern value="([A-Z0-9])+.([A-Z0-9])+.([A-Z0-9])+.([A-Z0-9])+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Message.Event.Item.Severity.CodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Error"/>
+			<xs:enumeration value="Warning"/>
+			<xs:enumeration value="Information"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Message.Event.Item.Short.DescriptionType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="Message.Event.Item.Detailed.DescriptionType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:complexType name="MessageEventItemParametersType">
+		<xs:sequence>
+			<xs:element name="Parameter" type="tns:MessageEventItemParameterType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MessageEventItemParameterType">
+		<xs:sequence>
+			<xs:element name="Message.Event.Item.Parameter.Identifier" type="tns:Message.Event.Item.Parameter.IdentifierType"/>
+			<xs:element name="Message.Event.Item.Parameter.Text" type="tns:Message.Event.Item.Parameter.TextType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Message.Event.Item.Parameter.IdentifierType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Message.Event.Item.Parameter.TextType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="4096"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="MessageEventItemLocationsType">
+		<xs:sequence>
+			<xs:element name="Location" type="tns:MessageEventItemLocationType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MessageEventItemLocationType">
+		<xs:sequence>
+			<xs:element name="BusinessDocument.Sequence.Number" type="tns:BusinessDocument.Sequence.NumberType"/>
+			<xs:element name="Message.Event.Item.Location.Path.Text" type="tns:Message.Event.Item.Location.Path.TextType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Message.Event.Item.Location.Path.TextType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1024"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- Party -->
+	<xs:complexType name="PartyType">
+		<xs:sequence>
+			<xs:element name="IdentificationDetails.IdentifierDesignation.Text" type="tns:IdentificationDetails.IdentifierDesignation.TextType"/>
+			<xs:element name="IdentificationDetails.IdentifierName.Text" type="tns:IdentificationDetails.IdentifierName.TextType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="IdentificationDetails.IdentifierDesignation.TextType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IdentificationDetails.IdentifierName.TextType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AgencyInternetDomainName"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- Software Information -->
+	<xs:complexType name="SoftwareInformationType">
+		<xs:sequence>
+			<xs:element name="OrganisationNameDetails.OrganisationalName.Text" type="tns:OrganisationNameDetails.OrganisationalName.TextType"/>
+			<xs:element name="SoftwareInformation.ProductName.Text" type="tns:SoftwareInformation.ProductName.TextType"/>
+			<xs:element name="SoftwareInformation.ProductVersion.Text" type="tns:SoftwareInformation.ProductVersion.TextType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="OrganisationNameDetails.OrganisationalName.TextType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="200"/>
+			<xs:pattern value="([0-9a-zA-Z \.,\?\(\)\{\}:;'\|\-_=\\/@#$%\*=&amp;&quot;])*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SoftwareInformation.ProductName.TextType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="80"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SoftwareInformation.ProductVersion.TextType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="80"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

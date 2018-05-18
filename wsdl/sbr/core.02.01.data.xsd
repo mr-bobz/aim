@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The source of truth of simple elements in this schema is the Taxonomy Reference Model (TREF). Changes should be made in the TREF first, then replicated in this file -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sbdm="http://sbr.gov.au/comn/sbdm.02.data" xmlns:tns="http://sbr.gov.au/comn/core.02.data" targetNamespace="http://sbr.gov.au/comn/core.02.data" elementFormDefault="qualified" version="02.01">
+	<xs:import namespace="http://sbr.gov.au/comn/sbdm.02.data" schemaLocation="sbdm.02.01.data.xsd"/>
+	<!-- Core / Agency Message Tracking SOAP Header -->
+	<xs:element name="MessageTracking" type="tns:MessageTrackingType" nillable="true"/>
+	<xs:complexType name="MessageTrackingType">
+		<xs:sequence>
+			<xs:element name="MessageTimestamps" type="sbdm:MessageTimestampsType"/>
+			<xs:element name="Message.Tracking.Identifier" type="tns:Message.Tracking.IdentifierType"/>
+		</xs:sequence>
+		<xs:anyAttribute namespace="##other"/>
+	</xs:complexType>
+	<xs:simpleType name="Message.Tracking.IdentifierType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- Core / Business NonRepudiation SOAP Header-->
+	<xs:element name="NonRepudiation" type="tns:NonRepudiationType" nillable="true"/>
+	<xs:complexType name="NonRepudiationType">
+		<xs:sequence>
+			<xs:element name="Message.NonRepudiationToken.Text" type="tns:Message.NonRepudiationToken.TextType"/>
+		</xs:sequence>
+		<xs:anyAttribute namespace="##other"/>
+	</xs:complexType>
+	<!-- Note that the classword of Text has been used, but the expectation is that the token will have a complex structure. -->
+	<xs:complexType name="Message.NonRepudiationToken.TextType">
+		<xs:sequence>
+			<xs:any processContents="skip"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- Fault Detail -->
+	<xs:simpleType name="Fault.AvailableAfter.DateTimeType">
+		<xs:restriction base="xs:dateTime"/>
+	</xs:simpleType>
+	<xs:complexType name="FaultDetailType">
+		<xs:sequence>
+			<xs:element name="AvailableAfter" type="tns:Fault.AvailableAfter.DateTimeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="FaultDetail" type="tns:FaultDetailType"/>
+</xs:schema>
